@@ -12,11 +12,11 @@ BEGIN
     WHERE id = NEW.id_film;
 RETURN NEW;
 END;
-$$ Language plpgsql;
+$$ Language plpgsql @@
 
 CREATE TRIGGER trg_recalculeazaRating
     AFTER INSERT OR UPDATE OF vot ON vizualizari FOR EACH ROW WHEN (NEW.vot IS NOT NULL)
-    EXECUTE FUNCTION recalculeazaRating();
+    EXECUTE FUNCTION recalculeazaRating() @@
 
 --Trigger 2: Analiza automata sentiment comentariu
 CREATE OR REPLACE FUNCTION analizaSentiment ()
@@ -64,11 +64,11 @@ BEGIN
     END IF;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 CREATE TRIGGER trg_analizaSentiment
     BEFORE INSERT OR UPDATE OF continut ON comentarii_filme FOR EACH ROW
-    EXECUTE FUNCTION analizaSentiment();
+    EXECUTE FUNCTION analizaSentiment() @@
 
 -- Trigger 3: Audit log pentru operatii pe clienti
 CREATE OR REPLACE FUNCTION auditClienti()
@@ -87,9 +87,10 @@ BEGIN
         VALUES ('clienti', 'DELETE', OLD.id, 'Client sters: ' || OLD.email);
         RETURN OLD;
     END IF;
+    RETURN NULL;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 CREATE TRIGGER trg_auditClienti
     AFTER INSERT OR UPDATE OR DELETE ON clienti FOR EACH ROW
-    EXECUTE FUNCTION auditClienti();
+    EXECUTE FUNCTION auditClienti() @@

@@ -23,7 +23,7 @@ VALUES (p_nume, p_prenume, p_email, p_parola_hash, p_telefon, p_oras)
 
 RETURN v_id_client;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 -- FUNCTIE: Adaugare vizualizare
 -- Exceptie: clientul sau filmul nu exista, sau nu exista versiunea
@@ -58,7 +58,7 @@ VALUES (p_id_client, p_id_film, p_id_versiune, p_vot)
 
 RETURN v_id;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 -- FUNCTIE: Adaugare comentariu film
 -- Exceptie: clientul nu a vizualizat filmul
@@ -85,7 +85,7 @@ VALUES (p_id_client, p_id_film, p_continut)
 
 RETURN v_id;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 -- PROCEDURA: Actualizare vot
 CREATE OR REPLACE PROCEDURE pr_actualizeaza_vot(
@@ -112,7 +112,7 @@ IF NOT FOUND THEN
             USING ERRCODE = 'P0005';
     END IF;
 END;
-$$;
+$$ @@
 
 
 -- FUNCTIE: Profil cinematic client
@@ -133,7 +133,7 @@ SELECT c.nume::VARCHAR, COUNT(v.id) AS numar_vizualizari, ROUND(AVG(v.vot)::NUME
 FROM vizualizari v JOIN filme f ON v.id_film = f.id JOIN categorii c ON f.id_categorie = c.id CROSS JOIN total t
     WHERE v.id_client = p_id_client GROUP BY c.nume, t.total_viz ORDER BY numar_vizualizari DESC;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 -- Algoritm de recomandari
 -- Calculeaza un scor de compatibilitate pentru fiecare film nevizualizat de client, bazat pe:
@@ -211,7 +211,7 @@ SELECT r.id_film, f.titlu, c.nume::VARCHAR, f.rating, r.scor, r.motiv FROM recom
     JOIN filme f ON r.id_film = f.id JOIN categorii c ON f.id_categorie = c.id
         WHERE r.id_client = p_id_client ORDER BY r.scor DESC;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 -- FUNCTIE: Top filme dupa rating si voturi
 CREATE OR REPLACE FUNCTION fn_top_filme(
@@ -236,7 +236,7 @@ SELECT f.id, f.titlu, c.nume::VARCHAR, f.rating, f.numar_voturi, COUNT(v.id) AS 
                 ORDER BY f.rating DESC, f.numar_voturi DESC
     LIMIT p_numar;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 
 -- FUNCTIE: Istoric complet client
@@ -258,7 +258,7 @@ SELECT f.id, f.titlu, c.nume::VARCHAR, v.data_vizualizare, v.vot, cf.continut, c
          LEFT JOIN comentarii_filme cf ON cf.id_client = p_id_client AND cf.id_film = f.id
             WHERE v.id_client = p_id_client ORDER BY v.data_vizualizare DESC;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 -- FUNCTIE: Statistici filme pe perioade sezoniere
 CREATE OR REPLACE FUNCTION fn_statistici_sezoniere(p_id_film INTEGER DEFAULT NULL)
@@ -283,7 +283,7 @@ SELECT
         WHERE (p_id_film IS NULL OR v.id_film = p_id_film) GROUP BY sezon, f.titlu
             ORDER BY numar_vizualizari DESC;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@
 
 -- FUNCTIE: Autentificare client
 CREATE OR REPLACE FUNCTION fn_autentificare(
@@ -312,4 +312,4 @@ IF NOT FOUND THEN
             USING ERRCODE = 'P0007';
 END IF;
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql @@

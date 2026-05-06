@@ -13,8 +13,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EmailALreadyExistException.class)
-    public ResponseEntity<Map<String, Object>> handleEmailExists(EmailALreadyExistException ex) {
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> handleEmailExists(EmailAlreadyExistsException ex) {
         return buildResponse(HttpStatus.CONFLICT, ex.getErrorCode(), ex.getMessage());
     }
 

@@ -64,7 +64,6 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error(ex.getErrorCode(), ex.getMessage()));
     }
 
-    // Prins dupa subclase — prinde orice MovieSphereException necaptata mai sus
     @ExceptionHandler(MovieSphereException.class)
     public ResponseEntity<ApiResponse<Void>> handleMovieSphere(MovieSphereException ex) {
         log.error("Eroare aplicatie [{}]: {}", ex.getErrorCode(), ex.getMessage());

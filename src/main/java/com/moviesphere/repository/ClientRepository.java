@@ -33,28 +33,22 @@ public class ClientRepository {
     }
 
     public LoginResponse autentificareParola(String email, String parolaRaw, PasswordEncoder passwordEncoder) {
-        String sql = """
-                SELECT id, nume, prenume, email, oras, parola_hash, activ
-                FROM clienti
-                WHERE email = ?
-                """;
+        String sql = "SELECT id, nume, prenume, email, oras, parola_hash, activ FROM clienti " +
+                "WHERE email = ?";
 
         try {
             List<Map<String, Object>> rezultat = jdbc.queryForList(sql, email);
 
             if (rezultat.isEmpty()) {
-                throw new AuthenticationException(
-                        "EMAIL_INEXISTENT",
-                        "Nu exista un cont pentru adresa " + email
-                );
+                throw new AuthenticationException("EMAIL_INEXISTENT",
+                        "Nu exista un cont pentru adresa " + email);
             }
 
             Map<String, Object> client = rezultat.get(0);
 
             Boolean activ = (Boolean) client.get("activ");
             if (activ == null || !activ) {
-                throw new AuthenticationException(
-                        "CONT_INACTIV",
+                throw new AuthenticationException("CONT_INACTIV",
                         "Contul asociat adresei " + email + " este inactiv."
                 );
             }
@@ -62,8 +56,7 @@ public class ClientRepository {
             String hashDinBD = (String) client.get("parola_hash");
 
             if (!passwordEncoder.matches(parolaRaw, hashDinBD)) {
-                throw new AuthenticationException(
-                        "PAROLA_INCORECTA",
+                throw new AuthenticationException("PAROLA_INCORECTA",
                         "Parola introdusa este incorecta."
                 );
             }
@@ -100,10 +93,8 @@ public class ClientRepository {
     }
 
     public List<IstoricResponse> istoricClient(Integer idClient) {
-        String sql = """
-                SELECT id_film, titlu, categorie, data_vizualizare, vot, comentariu, sentiment
-                FROM fn_istoric_client(?)
-                """;
+        String sql = "SELECT id_film, titlu, categorie, data_vizualizare, vot, comentariu, sentiment " +
+                "FROM fn_istoric_client(?)";
 
         try {
             return jdbc.query(sql, (rs, i) -> {
@@ -125,11 +116,8 @@ public class ClientRepository {
     }
 
     public List<Map<String, Object>> totiClientii() {
-        String sql = """
-                SELECT id, nume, prenume, email, telefon, oras, data_inregistrare, activ
-                FROM clienti
-                ORDER BY data_inregistrare DESC
-                """;
+        String sql = "SELECT id, nume, prenume, email, telefon, oras, data_inregistrare, activ " +
+                "FROM clienti ORDER BY data_inregistrare DESC";
 
         return jdbc.queryForList(sql);
     }

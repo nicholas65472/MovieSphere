@@ -12,7 +12,6 @@ public class ApiResponse<T> {
     private String codEroare;
     private T data;
 
-    // ── Success responses ──────────────────────────────────────────
 
     public static <T> ApiResponse<T> ok(T data) {
         ApiResponse<T> r = new ApiResponse<>();
@@ -37,7 +36,6 @@ public class ApiResponse<T> {
         return r;
     }
 
-    // ── Error responses ────────────────────────────────────────────
 
     public static <T> ApiResponse<T> error(String codEroare, String mesaj) {
         ApiResponse<T> r = new ApiResponse<>();

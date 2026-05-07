@@ -1,11 +1,14 @@
 package com.moviesphere.repository;
 
-import com.moviesphere.dto.response.*;
+import com.moviesphere.dto.response.IstoricResponse;
+import com.moviesphere.dto.response.LoginResponse;
+import com.moviesphere.dto.response.ProfilCategorieResponse;
 import com.moviesphere.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -29,24 +32,51 @@ public class ClientRepository {
         }
     }
 
+    public LoginResponse autentificareParola(String email, String parolaRaw, PasswordEncoder passwordEncoder) {
+        String sql = """
+                SELECT id, nume, prenume, email, oras, parola_hash, activ
+                FROM clienti
+                WHERE email = ?
+                """;
 
-    public LoginResponse autentificare(String email, String parolaHash) {
-        String sql = "SELECT id, nume, prenume, email, oras FROM fn_autentificare(?, ?)";
         try {
-            List<LoginResponse> rezultat = jdbc.query(sql, (rs, i) -> {
-                LoginResponse r = new LoginResponse();
-                r.setId(rs.getInt("id"));
-                r.setNume(rs.getString("nume"));
-                r.setPrenume(rs.getString("prenume"));
-                r.setEmail(rs.getString("email"));
-                r.setOras(rs.getString("oras"));
-                return r;
-            }, email, parolaHash);
+            List<Map<String, Object>> rezultat = jdbc.queryForList(sql, email);
 
             if (rezultat.isEmpty()) {
-                throw new AuthenticationException("AUTENTIFICARE_ESUATA", "Credentiale incorecte.");
+                throw new AuthenticationException(
+                        "EMAIL_INEXISTENT",
+                        "Nu exista un cont pentru adresa " + email
+                );
             }
-            return rezultat.getFirst();
+
+            Map<String, Object> client = rezultat.get(0);
+
+            Boolean activ = (Boolean) client.get("activ");
+            if (activ == null || !activ) {
+                throw new AuthenticationException(
+                        "CONT_INACTIV",
+                        "Contul asociat adresei " + email + " este inactiv."
+                );
+            }
+
+            String hashDinBD = (String) client.get("parola_hash");
+
+            if (!passwordEncoder.matches(parolaRaw, hashDinBD)) {
+                throw new AuthenticationException(
+                        "PAROLA_INCORECTA",
+                        "Parola introdusa este incorecta."
+                );
+            }
+
+            LoginResponse response = new LoginResponse();
+            response.setId((Integer) client.get("id"));
+            response.setNume((String) client.get("nume"));
+            response.setPrenume((String) client.get("prenume"));
+            response.setEmail((String) client.get("email"));
+            response.setOras((String) client.get("oras"));
+
+            return response;
+
         } catch (DataAccessException ex) {
             throw parseException(ex);
         }
@@ -54,6 +84,7 @@ public class ClientRepository {
 
     public List<ProfilCategorieResponse> profilClient(Integer idClient) {
         String sql = "SELECT categorie, numar_vizualizari, rating_mediu, procent FROM fn_profil_client(?)";
+
         try {
             return jdbc.query(sql, (rs, i) -> {
                 ProfilCategorieResponse r = new ProfilCategorieResponse();
@@ -69,8 +100,11 @@ public class ClientRepository {
     }
 
     public List<IstoricResponse> istoricClient(Integer idClient) {
-        String sql = "SELECT id_film, titlu, categorie, data_vizualizare, vot, comentariu, sentiment " +
-                "FROM fn_istoric_client(?)";
+        String sql = """
+                SELECT id_film, titlu, categorie, data_vizualizare, vot, comentariu, sentiment
+                FROM fn_istoric_client(?)
+                """;
+
         try {
             return jdbc.query(sql, (rs, i) -> {
                 IstoricResponse r = new IstoricResponse();
@@ -78,7 +112,8 @@ public class ClientRepository {
                 r.setTitlu(rs.getString("titlu"));
                 r.setCategorie(rs.getString("categorie"));
                 r.setDataVizualizare(rs.getTimestamp("data_vizualizare") != null
-                        ? rs.getTimestamp("data_vizualizare").toLocalDateTime() : null);
+                        ? rs.getTimestamp("data_vizualizare").toLocalDateTime()
+                        : null);
                 r.setVot(rs.getObject("vot") != null ? rs.getInt("vot") : null);
                 r.setComentariu(rs.getString("comentariu"));
                 r.setSentiment(rs.getString("sentiment"));
@@ -90,14 +125,19 @@ public class ClientRepository {
     }
 
     public List<Map<String, Object>> totiClientii() {
-        String sql = "SELECT id, nume, prenume, email, telefon, oras, data_inregistrare, activ " +
-                "FROM clienti ORDER BY data_inregistrare DESC";
+        String sql = """
+                SELECT id, nume, prenume, email, telefon, oras, data_inregistrare, activ
+                FROM clienti
+                ORDER BY data_inregistrare DESC
+                """;
+
         return jdbc.queryForList(sql);
     }
 
     public void dezactiveazaClient(Integer id) {
         String sql = "UPDATE clienti SET activ = FALSE WHERE id = ?";
         int rows = jdbc.update(sql, id);
+
         if (rows == 0) {
             throw new ClientNotFoundException("Clientul cu id " + id + " nu exista.");
         }
@@ -107,20 +147,33 @@ public class ClientRepository {
         String msg = ex.getMostSpecificCause().getMessage();
         log.error("Eroare BD: {}", msg);
 
-        if (msg == null) return new MovieSphereException("EROARE_NECUNOSCUTA", "Eroare necunoscuta.");
+        if (msg == null) {
+            return new MovieSphereException("EROARE_NECUNOSCUTA", "Eroare necunoscuta.");
+        }
 
-        if (msg.contains("EMAIL_EXISTENT"))
+        if (msg.contains("EMAIL_EXISTENT")) {
             return new EmailAlreadyExistsException(extractMessage(msg));
-        if (msg.contains("CLIENT_INEXISTENT"))
+        }
+
+        if (msg.contains("CLIENT_INEXISTENT")) {
             return new ClientNotFoundException(extractMessage(msg));
-        if (msg.contains("FILM_INEXISTENT"))
+        }
+
+        if (msg.contains("FILM_INEXISTENT")) {
             return new FilmNotFoundException(extractMessage(msg));
-        if (msg.contains("VOT_INVALID"))
+        }
+
+        if (msg.contains("VOT_INVALID")) {
             return new InvalidVoteException(extractMessage(msg));
-        if (msg.contains("VIZUALIZARE_LIPSA"))
+        }
+
+        if (msg.contains("VIZUALIZARE_LIPSA")) {
             return new ViewingNotFoundException(extractMessage(msg));
-        if (msg.contains("EMAIL_INEXISTENT") || msg.contains("PAROLA_INCORECTA"))
+        }
+
+        if (msg.contains("EMAIL_INEXISTENT") || msg.contains("PAROLA_INCORECTA")) {
             return new AuthenticationException(extractCode(msg), extractMessage(msg));
+        }
 
         return new MovieSphereException("EROARE_BD", msg);
     }

@@ -113,26 +113,26 @@ INSERT INTO distributie(id_film, id_actor, rol, tip_rol) VALUES
 
 
 INSERT INTO clienti(nume, prenume, email, parola_hash, telefon, oras) VALUES
-    ('Ionescu',   'Andrei',   'andrei.ionescu@email.ro',   md5('parola1'), '0721111111', 'Bucuresti'),
-    ('Popescu',   'Maria',    'maria.popescu@email.ro',    md5('parola2'), '0722222222', 'Cluj-Napoca'),
-    ('Dumitrescu','Ion',      'ion.dumitrescu@email.ro',   md5('parola3'), '0723333333', 'Iasi'),
-    ('Constantin','Elena',    'elena.constantin@email.ro', md5('parola4'), '0724444444', 'Timisoara'),
-    ('Gheorghe',  'Mihai',    'mihai.gheorghe@email.ro',   md5('parola5'), '0725555555', 'Brasov'),
-    ('Stoica',    'Ana',      'ana.stoica@email.ro',       md5('parola6'), '0726666666', 'Constanta'),
-    ('Marin',     'Cristian', 'cristian.marin@email.ro',  md5('parola7'), '0727777777', 'Galati'),
-    ('Tudor',     'Ioana',    'ioana.tudor@email.ro',      md5('parola8'), '0728888888', 'Craiova'),
-    ('Dima',      'Alexandru','alex.dima@email.ro',        md5('parola9'), '0729999999', 'Ploiesti'),
-    ('Vasile',    'Gabriela', 'gabriela.vasile@email.ro',  md5('parolaa'), '0730000000', 'Oradea'),
-    ('Popa',      'Razvan',   'razvan.popa@email.ro',      md5('parolab'), '0731111111', 'Arad'),
-    ('Moldovan',  'Simona',   'simona.moldovan@email.ro',  md5('parolac'), '0732222222', 'Cluj-Napoca'),
-    ('Rusu',      'Florin',   'florin.rusu@email.ro',      md5('parolad'), '0733333333', 'Sibiu'),
-    ('Niculescu', 'Teodora',  'teodora.niculescu@email.ro',md5('parolae'), '0734444444', 'Bacau'),
-    ('Manea',     'Bogdan',   'bogdan.manea@email.ro',     md5('parolaf'), '0735555555', 'Pitesti'),
-    ('Luca',      'Daniela',  'daniela.luca@email.ro',     md5('parolag'), '0736666666', 'Targu Mures'),
-    ('Barbu',     'Cosmin',   'cosmin.barbu@email.ro',     md5('parolah'), '0737777777', 'Buzau'),
-    ('Matei',     'Laura',    'laura.matei@email.ro',      md5('parolai'), '0738888888', 'Ramnicu Valcea'),
-    ('Neagu',     'Silviu',   'silviu.neagu@email.ro',     md5('parolaj'), '0739999999', 'Drobeta'),
-    ('Cretu',     'Carmen',   'carmen.cretu@email.ro',     md5('parolak'), '0740000000', 'Alexandria');
+    ('Ionescu',   'Andrei',   'andrei.ionescu@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0721111111', 'Bucuresti'),
+    ('Popescu',   'Maria',    'maria.popescu@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0722222222', 'Cluj-Napoca'),
+    ('Dumitrescu','Ion',      'ion.dumitrescu@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0723333333', 'Iasi'),
+    ('Constantin','Elena',    'elena.constantin@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0724444444', 'Timisoara'),
+    ('Gheorghe',  'Mihai',    'mihai.gheorghe@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0725555555', 'Brasov'),
+    ('Stoica',    'Ana',      'ana.stoica@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0726666666', 'Constanta'),
+    ('Marin',     'Cristian', 'cristian.marin@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0727777777', 'Galati'),
+    ('Tudor',     'Ioana',    'ioana.tudor@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0728888888', 'Craiova'),
+    ('Dima',      'Alexandru','alex.dima@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0729999999', 'Ploiesti'),
+    ('Vasile',    'Gabriela', 'gabriela.vasile@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0730000000', 'Oradea'),
+    ('Popa',      'Razvan',   'razvan.popa@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0731111111', 'Arad'),
+    ('Moldovan',  'Simona',   'simona.moldovan@email.ro',  '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0732222222', 'Cluj-Napoca'),
+    ('Rusu',      'Florin',   'florin.rusu@email.ro',      '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0733333333', 'Sibiu'),
+    ('Niculescu', 'Teodora',  'teodora.niculescu@email.ro','$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0734444444', 'Bacau'),
+    ('Manea',     'Bogdan',   'bogdan.manea@email.ro',     '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0735555555', 'Pitesti'),
+    ('Luca',      'Daniela',  'daniela.luca@email.ro',     '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0736666666', 'Targu Mures'),
+    ('Barbu', 'Cosmin',   'cosmin.barbu@email.ro', '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0737777777', 'Buzau'),
+    ('Matei',     'Laura',    'laura.matei@email.ro',      '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0738888888', 'Ramnicu Valcea'),
+    ('Neagu',     'Silviu',   'silviu.neagu@email.ro',  '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0739999999', 'Drobeta'),
+    ('Cretu',     'Carmen',   'carmen.cretu@email.ro',     '$2a$10$xn3LI/AjqicFYZFruSwve.681477XaVNaUQbr1gioaWPn4t1KhFkWy', '0740000000', 'Alexandria');
 
 
 INSERT INTO vizualizari(id_client, id_film, id_versiune, data_vizualizare, finalizata, vot) VALUES

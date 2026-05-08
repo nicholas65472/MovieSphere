@@ -39,7 +39,7 @@ public class ComentariuRepository {
         return jdbc.queryForList(sql);
     }
 
- void adaugaComentariuActor(Integer idClient, Integer idActor,
+    public void adaugaComentariuActor(Integer idClient, Integer idActor,
                                       Integer idFilm, String continut) {
         String sql = "INSERT INTO comentarii_actori(id_client, id_actor, id_film, continut) " +
                 "VALUES (?, ?, ?, ?)";

@@ -1,8 +1,6 @@
 package com.moviesphere.repository;
 
-import com.moviesphere.dto.response.RecomandareResponse;
-import com.moviesphere.dto.response.StatisticiSezonResponse;
-import com.moviesphere.dto.response.TopFilmResponse;
+import com.moviesphere.dto.response.*;
 import com.moviesphere.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,17 +21,15 @@ public class FilmRepository {
     public List<Map<String, Object>> getAllFilme() {
         String sql = "SELECT f.id, f.titlu, f.descriere, f.data_lansarii, f.durata_minute, " +
                 "f.rating, f.numar_voturi, f.poster_url, c.nume AS categorie " +
-                "FROM filme f  JOIN categorii c ON f.id_categorie = c.id WHERE f.activ = TRUE" +
+                "FROM filme f JOIN categorii c ON f.id_categorie = c.id WHERE f.activ = TRUE " +
                 "ORDER BY f.rating DESC";
         return jdbc.queryForList(sql);
     }
 
-
     public Map<String, Object> getFilmById(Integer id) {
         String sql = "SELECT f.id, f.titlu, f.descriere, f.data_lansarii, " +
-                "f.durata_minute,f.rating, f.numar_voturi, f.poster_url, " +
-                "c.id AS id_categorie, c.nume AS categorie FROM filme f " +
-                "JOIN categorii c ON f.id_categorie = c.id WHERE f.id = ? AND f.activ = TRUE";
+                "f.durata_minute, f.rating, f.numar_voturi, f.poster_url, c.id AS id_categorie, c.nume AS categorie " +
+                "FROM filme f JOIN categorii c ON f.id_categorie = c.id WHERE f.id = ? AND f.activ = TRUE";
         List<Map<String, Object>> rezultat = jdbc.queryForList(sql, id);
         if (rezultat.isEmpty()) {
             throw new FilmNotFoundException("Filmul cu id " + id + " nu exista sau nu este activ.");
@@ -48,11 +44,9 @@ public class FilmRepository {
 
     public List<Map<String, Object>> getDistributieFilm(Integer idFilm) {
         String sql = "SELECT a.id, a.nume_scena, a.prenume, a.nume_familie, d.rol, d.tip_rol " +
-                "FROM distributie d JOIN actori a ON d.id_actor = a.id WHERE d.id_film = ? " +
-                "ORDER BY d.tip_rol";
+                "FROM distributie d JOIN actori a ON d.id_actor = a.id WHERE d.id_film = ? ORDER BY d.tip_rol";
         return jdbc.queryForList(sql, idFilm);
     }
-
 
     public List<TopFilmResponse> topFilme(Integer idCategorie, Integer numar) {
         String sql = "SELECT id_film, titlu, categorie, rating, numar_voturi, numar_vizualizari " +
@@ -74,8 +68,7 @@ public class FilmRepository {
     }
 
     public List<RecomandareResponse> genereazaRecomandari(Integer idClient, Integer numarMax) {
-        String sql = "SELECT id_film, titlu, categorie, rating, scor_final, motiv" +
-                "FROM fn_genereaza_recomandari(?, ?)";
+        String sql = "SELECT id_film, titlu, categorie, rating, scor_final, motiv FROM fn_genereaza_recomandari(?, ?)";
         try {
             return jdbc.query(sql, (rs, i) -> {
                 RecomandareResponse r = new RecomandareResponse();
@@ -93,8 +86,7 @@ public class FilmRepository {
     }
 
     public List<StatisticiSezonResponse> statisticiSezoniere(Integer idFilm) {
-        String sql = "SELECT sezon, numar_vizualizari, rating_mediu, titlu_film" +
-                "FROM fn_statistici_sezoniere(?)";
+        String sql = "SELECT sezon, numar_vizualizari, rating_mediu, titlu_film FROM fn_statistici_sezoniere(?)";
         try {
             return jdbc.query(sql, (rs, i) -> {
                 StatisticiSezonResponse r = new StatisticiSezonResponse();
@@ -109,28 +101,52 @@ public class FilmRepository {
         }
     }
 
+    public List<PredictieSezonResponse> predictiiSezoniere(String sezon, Integer numarMax) {
+        String sql = "SELECT id_film, titlu, categorie, rating, viz_istorice_sezon, " +
+                "tendinta_recenta, scor_predictie, explicatie FROM fn_predictii_sezoniere(?, ?)";
+        try {
+            return jdbc.query(sql, (rs, i) -> {
+                PredictieSezonResponse r = new PredictieSezonResponse();
+                r.setIdFilm(rs.getInt("id_film"));
+                r.setTitlu(rs.getString("titlu"));
+                r.setCategorie(rs.getString("categorie"));
+                r.setRating(rs.getBigDecimal("rating"));
+                r.setVizIstoriceSezon(rs.getLong("viz_istorice_sezon"));
+                r.setTendintaRecenta(rs.getLong("tendinta_recenta"));
+                r.setScorPredictie(rs.getBigDecimal("scor_predictie"));
+                r.setExplicatie(rs.getString("explicatie"));
+                return r;
+            }, sezon, numarMax);
+        } catch (DataAccessException ex) {
+            throw parseException(ex);
+        }
+    }
+
     public List<Map<String, Object>> getComentariiFilm(Integer idFilm) {
-        String sql = "SELECT cf.id, c.prenume || ' ' || c.nume AS autor, cf.continut, cf.sentiment, " +
-                "cf.data_comentariu FROM comentarii_filme cf JOIN clienti c ON cf.id_client = c.id " +
+        String sql = "SELECT cf.id, c.prenume || ' ' || c.nume AS autor, cf.continut, " +
+                "cf.sentiment, cf.data_comentariu FROM comentarii_filme cf JOIN clienti c ON cf.id_client = c.id " +
                 "WHERE cf.id_film = ? ORDER BY cf.data_comentariu DESC";
         return jdbc.queryForList(sql, idFilm);
     }
 
     public List<Map<String, Object>> cautaFilme(String query) {
-        String sql = "SELECT f.id, f.titlu, f.rating, f.poster_url, c.nume AS categorie FROM filme f " +
-                "JOIN categorii c ON f.id_categorie = c.id WHERE f.activ = TRUE AND f.titlu ILIKE ? " +
+        String sql = "SELECT f.id, f.titlu, f.rating, f.poster_url, c.nume AS categorie " +
+                "FROM filme f JOIN categorii c ON f.id_categorie = c.id WHERE f.activ = TRUE AND f.titlu ILIKE ? " +
                 "ORDER BY f.rating DESC LIMIT 20";
         return jdbc.queryForList(sql, "%" + query + "%");
     }
 
     private RuntimeException parseException(DataAccessException ex) {
         String msg = ex.getMostSpecificCause().getMessage();
-        log.error("Eroare BD: {}", msg);
-        if (msg == null) return new MovieSphereException("EROARE_NECUNOSCUTA", "Eroare necunoscuta.");
+        log.error("Eroare BD film: {}", msg);
+        if (msg == null)
+            return new MovieSphereException("EROARE_NECUNOSCUTA", "Eroare necunoscuta.");
         if (msg.contains("CLIENT_INEXISTENT"))
             return new ClientNotFoundException(extractMessage(msg));
         if (msg.contains("FILM_INEXISTENT"))
             return new FilmNotFoundException(extractMessage(msg));
+        if (msg.contains("SEZON_INVALID"))
+            return new MovieSphereException("SEZON_INVALID", extractMessage(msg));
         return new MovieSphereException("EROARE_BD", msg);
     }
 

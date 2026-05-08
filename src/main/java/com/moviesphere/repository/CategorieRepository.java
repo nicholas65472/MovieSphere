@@ -8,9 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Repository pentru categorii de filme.
- */
 @Repository
 @RequiredArgsConstructor
 public class CategorieRepository {

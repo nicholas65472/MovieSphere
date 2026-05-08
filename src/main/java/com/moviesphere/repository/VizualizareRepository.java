@@ -61,6 +61,8 @@ public class VizualizareRepository {
             return new ClientNotFoundException(extractMessage(msg));
         if (msg.contains("FILM_INEXISTENT"))
             return new FilmNotFoundException(extractMessage(msg));
+        if (msg.contains("VERSIUNE_INVALIDA"))
+            return new VersiuneInvalidaException(extractMessage(msg));
         if (msg.contains("VOT_INVALID"))
             return new InvalidVoteException(extractMessage(msg));
         if (msg.contains("VIZUALIZARE_LIPSA"))

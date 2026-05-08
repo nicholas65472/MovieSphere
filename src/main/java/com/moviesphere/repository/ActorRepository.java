@@ -21,8 +21,7 @@ public class ActorRepository {
 
     public Map<String, Object> getActorById(Integer id) {
         String sql = "SELECT a.id, a.nume_scena, a.prenume, a.nume_familie, " +
-                "a.data_nasterii, a.nationalitate, a.biografie " +
-                "FROM actori a WHERE a.id = ? ";
+                "a.data_nasterii, a.nationalitate, a.biografie FROM actori a WHERE a.id = ? ";
         List<Map<String, Object>> r = jdbc.queryForList(sql, id);
         if (r.isEmpty()) throw new com.moviesphere.exception.MovieSphereException(
                 "ACTOR_INEXISTENT", "Actorul cu id " + id + " nu exista.");

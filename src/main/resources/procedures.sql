@@ -364,8 +364,8 @@ LANGUAGE plpgsql @@
 --   20% - popularitate
 --   10% - actori preferati
 CREATE OR REPLACE FUNCTION fn_genereaza_recomandari(
-    p_id_client     INTEGER,
-    p_numar_max     INTEGER DEFAULT 10
+    p_id_client INTEGER,
+    p_numar_max INTEGER DEFAULT 10
 )
 RETURNS TABLE (
     id_film         INTEGER,
@@ -378,39 +378,38 @@ RETURNS TABLE (
 DECLARE
 v_total_viz INTEGER;
 BEGIN
-    IF NOT EXISTS (SELECT 1 FROM clienti WHERE id = p_id_client) THEN
+    IF NOT EXISTS (SELECT 1 FROM clienti cl WHERE cl.id = p_id_client) THEN
         RAISE EXCEPTION 'CLIENT_INEXISTENT: Clientul cu id % nu exista.', p_id_client
             USING ERRCODE = 'P0002';
     END IF;
 
 SELECT COUNT(*)
 INTO v_total_viz
-FROM vizualizari
-WHERE id_client = p_id_client;
+FROM vizualizari vz
+WHERE vz.id_client = p_id_client;
 
 DELETE
-FROM recomandari
-WHERE id_client = p_id_client;
+FROM recomandari r
+WHERE r.id_client = p_id_client;
 
-WITH profil_categorii AS (SELECT f.id_categorie,
-                                 COUNT(*) ::NUMERIC / NULLIF(v_total_viz, 0) AS pondere
-                          FROM vizualizari v
-                                   JOIN filme f ON v.id_film = f.id
-                          WHERE v.id_client = p_id_client
+WITH profil_categorii AS (SELECT f.id_categorie, COUNT(*) ::NUMERIC / NULLIF(v_total_viz, 0) AS pondere
+                          FROM vizualizari vz
+                          JOIN filme f ON vz.id_film = f.id
+                          WHERE vz.id_client = p_id_client
                           GROUP BY f.id_categorie),
      actori_preferati AS (SELECT DISTINCT d.id_actor
-                          FROM vizualizari v
-                                   JOIN distributie d ON v.id_film = d.id_film
-                          WHERE v.id_client = p_id_client
-                            AND v.vot >= 7),
-     max_viz AS (SELECT GREATEST(MAX(cnt), 1) AS max_cnt
+                          FROM vizualizari vz
+                                   JOIN distributie d ON vz.id_film = d.id_film
+                          WHERE vz.id_client = p_id_client
+                            AND vz.vot >= 7),
+     max_viz AS (SELECT GREATEST(MAX(t.cnt), 1) AS max_cnt
                  FROM (SELECT COUNT(*) AS cnt
-                       FROM vizualizari
-                       GROUP BY id_film) t),
+                       FROM vizualizari vz_pop
+                       GROUP BY vz_pop.id_film) t),
      scoruri AS (SELECT f.id AS film_id,
-                        f.titlu,
+                        f.titlu  AS titlu_film,
                         cat.nume AS categorie_nume,
-                        f.rating,
+                        f.rating AS rating_film,
                         COALESCE(pc.pondere, 0) * 40 AS scor_categorie,
                         (f.rating / 10.0) * 30 AS scor_rating,
                         (COUNT(vg.id)::NUMERIC / mv.max_cnt) * 20 AS scor_popularitate,
@@ -420,7 +419,7 @@ WITH profil_categorii AS (SELECT f.id_categorie,
                                                   JOIN actori_preferati ap ON d2.id_actor = ap.id_actor
                                          WHERE d2.id_film = f.id) THEN 10
                             ELSE 0
-                            END AS scor_actori
+                            END                                   AS scor_actori
                  FROM filme f
                           JOIN categorii cat ON f.id_categorie = cat.id
                           LEFT JOIN profil_categorii pc ON f.id_categorie = pc.id_categorie
@@ -428,10 +427,15 @@ WITH profil_categorii AS (SELECT f.id_categorie,
                           CROSS JOIN max_viz mv
                  WHERE f.activ = TRUE
                    AND NOT EXISTS (SELECT 1
-                                   FROM vizualizari v2
-                                   WHERE v2.id_film = f.id
-                                     AND v2.id_client = p_id_client)
-                 GROUP BY f.id, f.titlu, cat.nume, f.rating, pc.pondere, mv.max_cnt)
+                                   FROM vizualizari vz_client
+                                   WHERE vz_client.id_film = f.id
+                                     AND vz_client.id_client = p_id_client)
+                 GROUP BY f.id,
+                          f.titlu,
+                          cat.nume,
+                          f.rating,
+                          pc.pondere,
+                          mv.max_cnt)
 INSERT
 INTO recomandari(id_client, id_film, scor, motiv)
 SELECT p_id_client,
@@ -447,7 +451,7 @@ ORDER BY (s.scor_categorie + s.scor_rating + s.scor_popularitate + s.scor_actori
 RETURN QUERY
 SELECT r.id_film,
        f.titlu,
-       c.nume::VARCHAR, f.rating,
+       c.nume::VARCHAR AS categorie, f.rating,
        r.scor,
        r.motiv
 FROM recomandari r

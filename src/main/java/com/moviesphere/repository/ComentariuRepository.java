@@ -70,6 +70,8 @@ public class ComentariuRepository {
             return new ViewingNotFoundException(extractMessage(msg));
         if (msg.contains("CLIENT_INEXISTENT"))
             return new ClientNotFoundException(extractMessage(msg));
+        if (msg.contains("ACTOR_FILM_INVALID"))
+            return new MovieSphereException("ACTOR_FILM_INVALID", extractMessage(msg));
 
         return new MovieSphereException("EROARE_BD", msg);
     }

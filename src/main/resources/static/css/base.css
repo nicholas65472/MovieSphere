@@ -1,0 +1,84 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0b0a07;
+  --bg2: #15130d;
+  --bg3: #211d13;
+  --bg4: #332a1b;
+  --panel: rgba(23, 21, 15, .93);
+  --panel2: rgba(32, 28, 19, .93);
+  --brass: #c89b54;
+  --brass2: #e0bc77;
+  --red: #b33428;
+  --green: #2fa477;
+  --cyan: #559aa6;
+  --amber: #e59d34;
+  --text: #ead7b6;
+  --text2: #b7a98c;
+  --text3: #756b59;
+  --border: rgba(224, 188, 119, .16);
+  --border2: rgba(224, 188, 119, .31);
+  --success: #2fa477;
+  --danger: #cc463a;
+  --warning: #e59d34;
+  --radius: 6px;
+  --radius-lg: 6px;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', Consolas, monospace;
+  --sidebar-w: 282px;
+  --topbar-h: 86px;
+}
+
+html { background: #050402; }
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-body);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.55;
+  letter-spacing: 0;
+  overflow-x: hidden;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.25), transparent 22%, transparent 78%, rgba(0,0,0,.36)),
+    linear-gradient(180deg, #15120c 0%, #090806 45%, #040302 100%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 96px),
+    repeating-linear-gradient(0deg, rgba(255,255,255,.022) 0 1px, transparent 1px 72px),
+    repeating-linear-gradient(135deg, rgba(255,255,255,.018) 0 1px, transparent 1px 7px);
+  opacity: .36;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(161, 96, 36, .22), transparent 18%, transparent 82%, rgba(41, 83, 82, .18)),
+    linear-gradient(180deg, rgba(255, 217, 143, .07), transparent 18%, rgba(0,0,0,.36));
+  box-shadow: inset 0 0 160px rgba(0,0,0,.82);
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: var(--font-body); cursor: pointer; border: none; background: none; }
+input, select, textarea { font-family: var(--font-body); }
+button, input, select, textarea { letter-spacing: 0; }
+
+::selection { background: rgba(200,155,84,.36); color: #fff4d8; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: #090806; }
+::-webkit-scrollbar-thumb { background: #4a3923; border: 2px solid #090806; border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: #6a4f2c; }

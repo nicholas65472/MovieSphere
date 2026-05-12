@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieSphere</title>
+
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="css/base.css?v=20260512-1">
+    <link rel="stylesheet" href="css/layout.css?v=20260512-1">
+    <link rel="stylesheet" href="css/pages.css?v=20260512-1">
+    <link rel="stylesheet" href="css/components.css?v=20260512-1">
+    <link rel="stylesheet" href="css/dashboard.css?v=20260512-1">
+    <link rel="stylesheet" href="css/responsive.css?v=20260512-1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+</head>
+
+<body>
+<div id="app">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-icon">MS</div>
+            <div class="logo-text">Movie<span>Sphere</span></div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">General</div>
+
+            <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+                <i class="ti ti-layout-dashboard"></i>
+                <span>Dashboard</span>
+            </div>
+
+            <div class="nav-item" data-page="filme" onclick="navigate('filme')">
+                <i class="ti ti-movie"></i>
+                <span>Filme</span>
+            </div>
+
+            <div class="nav-item" data-page="top" onclick="navigate('top')">
+                <i class="ti ti-trophy"></i>
+                <span>Top filme</span>
+            </div>
+
+            <div class="nav-item" data-page="actori" onclick="navigate('actori')">
+                <i class="ti ti-user-star"></i>
+                <span>Actori</span>
+            </div>
+
+            <div class="nav-section-title">Client</div>
+
+            <div class="nav-item" data-page="profil" onclick="navigate('profil')">
+                <i class="ti ti-user"></i>
+                <span>Profil</span>
+            </div>
+
+            <div class="nav-item" data-page="recomandari" onclick="navigate('recomandari')">
+                <i class="ti ti-stars"></i>
+                <span>Recomandări</span>
+            </div>
+
+            <div class="nav-item" data-page="clienti" onclick="navigate('clienti')">
+                <i class="ti ti-users"></i>
+                <span>Clienți</span>
+            </div>
+
+            <div class="nav-section-title">Analiză</div>
+
+            <div class="nav-item" data-page="statistici" onclick="navigate('statistici')">
+                <i class="ti ti-chart-bar"></i>
+                <span>Statistici</span>
+            </div>
+
+            <div class="nav-item" data-page="predictii" onclick="navigate('predictii')">
+                <i class="ti ti-chart-line"></i>
+                <span>Predicții</span>
+            </div>
+        </nav>
+
+        <div class="sidebar-user">
+            <div class="user-card" id="sidebar-user-card" onclick="handleUserClick()">
+                <div class="user-avatar" id="sidebar-user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" id="sidebar-user-name">Vizitator</div>
+                    <div class="user-email" id="sidebar-user-email">Click pentru login</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main">
+        <header class="topbar">
+            <button class="hamburger" onclick="toggleSidebar(true)">
+                <i class="ti ti-menu-2"></i>
+            </button>
+
+            <div class="topbar-title" id="topbar-title">Dashboard</div>
+
+            <div class="search-box">
+                <i class="ti ti-search"></i>
+                <input id="global-search" placeholder="Caută filme..." onkeydown="handleGlobalSearch(event)">
+            </div>
+
+            <div class="topbar-actions">
+                <button class="icon-btn" onclick="openModal('modal-login')" title="Login">
+                    <i class="ti ti-login"></i>
+                </button>
+                <button class="icon-btn" onclick="logout()" title="Logout">
+                    <i class="ti ti-logout"></i>
+                </button>
+            </div>
+        </header>
+
+        <section class="page-content">
+            <div id="page-dashboard" class="page-view active"></div>
+            <div id="page-filme" class="page-view"></div>
+            <div id="page-actori" class="page-view"></div>
+            <div id="page-clienti" class="page-view"></div>
+            <div id="page-statistici" class="page-view"></div>
+            <div id="page-recomandari" class="page-view"></div>
+            <div id="page-predictii" class="page-view"></div>
+            <div id="page-profil" class="page-view"></div>
+            <div id="page-top" class="page-view"></div>
+        </section>
+    </main>
+</div>
+
+<div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleSidebar(false)"></div>
+
+<div id="modal-root">
+    <div data-include="views/modals/auth.html"></div>
+    <div data-include="views/modals/film.html"></div>
+    <div data-include="views/modals/actor.html"></div>
+    <div data-include="views/modals/client.html"></div>
+    <div data-include="views/modals/vizualizare.html"></div>
+    <div data-include="views/modals/comentariu.html"></div>
+</div>
+
+<div id="toast-container"></div>
+
+<script src="js/core/state.js?v=20260512-1"></script>
+<script src="js/core/utils.js?v=20260512-1"></script>
+<script src="js/api/api.js?v=20260512-1"></script>
+<script src="js/components/modal.js?v=20260512-1"></script>
+<script src="js/router.js?v=20260512-1"></script>
+<script src="js/auth.js?v=20260512-1"></script>
+<script src="js/components/forms.js?v=20260512-1"></script>
+<script src="js/modules/dashboard.js?v=20260512-1"></script>
+<script src="js/modules/filme.js?v=20260512-1"></script>
+<script src="js/modules/actori.js?v=20260512-1"></script>
+<script src="js/modules/clienti.js?v=20260512-1"></script>
+<script src="js/modules/statistici.js?v=20260512-1"></script>
+<script src="js/modules/recomandari.js?v=20260512-1"></script>
+<script src="js/modules/predictii.js?v=20260512-1"></script>
+<script src="js/modules/profil.js?v=20260512-1"></script>
+<script src="js/modules/top.js?v=20260512-1"></script>
+<script src="js/router-page.js?v=20260512-1"></script>
+<script src="js/app.js?v=20260512-1"></script>
+</body>
+</html>

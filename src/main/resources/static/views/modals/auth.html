@@ -1,0 +1,83 @@
+<div class="modal-overlay" id="modal-login">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Autentificare</div>
+            <button class="icon-btn" onclick="closeModal('modal-login')">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input class="form-input" id="login-email" type="email" required placeholder="email@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Parolă</label>
+                    <input class="form-input" id="login-parola" type="password" required placeholder="Parola">
+                </div>
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="ti ti-login"></i>
+                    Autentificare
+                </button>
+
+                <button class="btn btn-secondary" type="button" onclick="closeModal('modal-login');openModal('modal-register')">
+                    Creează cont
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modal-register">
+    <div class="modal">
+        <div class="modal-header">
+            <div class="modal-title">Înregistrare</div>
+            <button class="icon-btn" onclick="closeModal('modal-register')">
+                <i class="ti ti-x"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <form id="register-form">
+                <div class="form-group">
+                    <label class="form-label">Nume</label>
+                    <input class="form-input" id="reg-nume" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Prenume</label>
+                    <input class="form-input" id="reg-prenume" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input class="form-input" id="reg-email" type="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Parolă</label>
+                    <input class="form-input" id="reg-parola" type="password" minlength="6" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Telefon</label>
+                    <input class="form-input" id="reg-telefon">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Oraș</label>
+                    <input class="form-input" id="reg-oras">
+                </div>
+
+                <button class="btn btn-primary" type="submit">
+                    <i class="ti ti-user-plus"></i>
+                    Creează cont
+                </button>
+            </form>
+        </div>
+    </div>
+</div>

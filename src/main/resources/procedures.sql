@@ -84,6 +84,8 @@ CREATE OR REPLACE FUNCTION fn_adauga_comentariu(
 RETURNS INTEGER AS $$
 DECLARE
 v_id INTEGER;
+v_client TEXT;
+v_film TEXT;
 BEGIN
     IF NOT EXISTS (
         SELECT 1
@@ -91,7 +93,17 @@ BEGIN
         WHERE id_client = p_id_client
           AND id_film = p_id_film
     ) THEN
-        RAISE EXCEPTION 'VIZUALIZARE_LIPSA: Clientul % nu a vizualizat filmul % si nu poate lasa comentariu.', p_id_client, p_id_film
+        SELECT COALESCE(prenume || ' ' || nume, 'Clientul ' || p_id_client::TEXT)
+        INTO v_client
+        FROM clienti
+        WHERE id = p_id_client;
+
+        SELECT COALESCE(titlu, 'filmul ' || p_id_film::TEXT)
+        INTO v_film
+        FROM filme
+        WHERE id = p_id_film;
+
+        RAISE EXCEPTION 'VIZUALIZARE_LIPSA: % nu a vizualizat filmul "%", deci nu poate lasa comentariu.', COALESCE(v_client, 'Clientul ' || p_id_client::TEXT), COALESCE(v_film, p_id_film::TEXT)
             USING ERRCODE = 'P0005';
     END IF;
 

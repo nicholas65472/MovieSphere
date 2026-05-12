@@ -93,40 +93,73 @@ ON vizualizari
     RETURNS TRIGGER AS $$
 DECLARE
 v_text TEXT;
+    v_text_normalizat TEXT;
     v_scor_pozitiv
 INTEGER := 0;
     v_scor_negativ
 INTEGER := 0;
     cuvinte_pozitive
 TEXT[] := ARRAY[
-        'excelent', 'superb', 'minunat', 'fantastic', 'extraordinar',
-        'placut', 'bun', 'frumos', 'recomandat', 'genial', 'captivant',
-        'impresionant', 'magistral', 'senzational', 'uimitor', 'perfect',
-        'excellent', 'great', 'amazing', 'wonderful', 'brilliant', 'love',
-        'best', 'awesome', 'outstanding', 'masterpiece'
+        'excelent', 'superb', 'superba', 'superbe', 'superbi', 'minunat', 'minunata',
+        'fantastic', 'extraordinar', 'extraordinara', 'placut', 'placuta', 'bun',
+        'buna', 'bune', 'frumos', 'frumoasa', 'recomand', 'recomandat', 'genial',
+        'captivant', 'impresionant', 'magistral', 'senzational', 'uimitor', 'perfect',
+        'perfecta', 'emotionant', 'emotionanta', 'excelent', 'tare', 'reusit',
+        'reusita', 'excellent', 'great', 'amazing', 'wonderful', 'brilliant', 'love',
+        'loved', 'best', 'awesome', 'outstanding', 'masterpiece', 'good', 'beautiful'
     ];
     cuvinte_negative
 TEXT[] := ARRAY[
-        'plictisitor', 'slab', 'dezamagitor', 'oribil', 'rau',
-        'banal', 'mediocru', 'enervant', 'groaznic', 'teribil', 'urat',
-        'boring', 'bad', 'terrible', 'awful', 'worst', 'hate', 'poor',
-        'disappointing', 'weak', 'horrible', 'waste', 'dreadful'
+        'plictisitor', 'plictisitoare', 'slab', 'slaba', 'dezamagitor', 'dezamagitoare',
+        'oribil', 'oribila', 'rau', 'rea', 'prost', 'proasta', 'banal', 'banala',
+        'mediocru', 'mediocra', 'enervant', 'groaznic', 'groaznica', 'teribil',
+        'teribila', 'urat', 'urata', 'plictiseala', 'dezamagit', 'dezamagita',
+        'nasol', 'naspa', 'confuz', 'confuza', 'boring', 'bad', 'terrible', 'awful',
+        'worst', 'hate', 'hated', 'poor', 'disappointing', 'weak', 'horrible',
+        'waste', 'dreadful'
+    ];
+    expresii_negative
+TEXT[] := ARRAY[
+        'nu mi a placut', 'nu mi placut', 'nu mi-a placut', 'nu imi place',
+        'nu mi place', 'nu mi a placut deloc', 'nu recomand', 'nu l recomand',
+        'nu este bun', 'nu e bun', 'nu este buna', 'nu e buna', 'nu a fost bun',
+        'nu a fost buna', 'nu este frumos', 'nu e frumos', 'nu este superb',
+        'nu e superb', 'nu este reusit', 'nu e reusit', 'nu mi a placut filmul',
+        'mi a displacut', 'mi-a displacut', 'nu as recomanda', 'n as recomanda',
+        'not good', 'not great', 'not amazing', 'did not like', 'didnt like',
+        'do not recommend', 'dont recommend'
     ];
     cuvant
 TEXT;
 BEGIN
     v_text := LOWER(COALESCE(NEW.continut, ''));
+    v_text_normalizat := LOWER(TRANSLATE(v_text, 'ăâîșşțţĂÂÎȘŞȚŢ', 'aaissttAAISSTT'));
+    v_text_normalizat := REPLACE(v_text_normalizat, '-', ' ');
+    v_text_normalizat := REGEXP_REPLACE(v_text_normalizat, '[^a-z0-9]+', ' ', 'g');
+    v_text_normalizat := ' ' || TRIM(v_text_normalizat) || ' ';
+
+    FOREACH
+cuvant IN ARRAY expresii_negative LOOP
+        IF v_text_normalizat LIKE '% ' || REPLACE(cuvant, '-', ' ') || ' %' THEN
+            v_scor_negativ := v_scor_negativ + 3;
+        END IF;
+    END LOOP;
 
     FOREACH
 cuvant IN ARRAY cuvinte_pozitive LOOP
-        IF v_text LIKE '%' || cuvant || '%' THEN
+        IF v_text_normalizat LIKE '% nu %' || cuvant || ' %'
+           OR v_text_normalizat LIKE '% n %' || cuvant || ' %'
+           OR v_text_normalizat LIKE '% fara %' || cuvant || ' %'
+           OR v_text_normalizat LIKE '% deloc %' || cuvant || ' %' THEN
+            v_scor_negativ := v_scor_negativ + 2;
+        ELSIF v_text_normalizat LIKE '% ' || cuvant || ' %' THEN
             v_scor_pozitiv := v_scor_pozitiv + 1;
     END IF;
 END LOOP;
 
     FOREACH
 cuvant IN ARRAY cuvinte_negative LOOP
-        IF v_text LIKE '%' || cuvant || '%' THEN
+        IF v_text_normalizat LIKE '% ' || cuvant || ' %' THEN
             v_scor_negativ := v_scor_negativ + 1;
 END IF;
 END LOOP;

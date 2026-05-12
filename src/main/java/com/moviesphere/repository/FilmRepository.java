@@ -49,8 +49,9 @@ public class FilmRepository {
     }
 
     public List<TopFilmResponse> topFilme(Integer idCategorie, Integer numar) {
-        String sql = "SELECT id_film, titlu, categorie, rating, numar_voturi, numar_vizualizari " +
-                "FROM fn_top_filme(?, ?)";
+        String sql = "SELECT t.id_film, t.titlu, t.categorie, t.rating, t.numar_voturi, " +
+                "t.numar_vizualizari, f.poster_url " +
+                "FROM fn_top_filme(?, ?) t JOIN filme f ON f.id = t.id_film";
         try {
             return jdbc.query(sql, (rs, i) -> {
                 TopFilmResponse r = new TopFilmResponse();
@@ -60,6 +61,7 @@ public class FilmRepository {
                 r.setRating(rs.getBigDecimal("rating"));
                 r.setNumarVoturi(rs.getInt("numar_voturi"));
                 r.setNumarVizualizari(rs.getLong("numar_vizualizari"));
+                r.setPosterUrl(rs.getString("poster_url"));
                 return r;
             }, idCategorie, numar);
         } catch (DataAccessException ex) {
@@ -152,6 +154,11 @@ public class FilmRepository {
 
     private String extractMessage(String msg) {
         int idx = msg.indexOf(':');
-        return idx >= 0 ? msg.substring(idx + 1).trim() : msg;
+        String clean = idx >= 0 ? msg.substring(idx + 1) : msg;
+        int lineBreak = clean.indexOf('\n');
+        if (lineBreak >= 0) {
+            clean = clean.substring(0, lineBreak);
+        }
+        return clean.trim();
     }
 }

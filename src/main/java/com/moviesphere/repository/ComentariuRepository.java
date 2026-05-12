@@ -78,6 +78,11 @@ public class ComentariuRepository {
 
     private String extractMessage(String msg) {
         int idx = msg.indexOf(':');
-        return idx >= 0 ? msg.substring(idx + 1).trim() : msg;
+        String clean = idx >= 0 ? msg.substring(idx + 1) : msg;
+        int lineBreak = clean.indexOf('\n');
+        if (lineBreak >= 0) {
+            clean = clean.substring(0, lineBreak);
+        }
+        return clean.trim();
     }
 }

@@ -11,4 +11,5 @@ public class TopFilmResponse {
     private BigDecimal rating;
     private Integer numarVoturi;
     private Long numarVizualizari;
+    private String posterUrl;
 }

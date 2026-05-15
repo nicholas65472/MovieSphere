@@ -127,6 +127,6 @@ Pentru un cont nou, fără vizualizări, aplicația nu afișează recomandări a
 Aplicația include un cont de admin definit în datele de seed:
 
 ```text
-Email: nicholasstefan654@gmail.com
+Email: nicholas.stefan@email.com
 Parolă: real2016
 Rol: ADMIN

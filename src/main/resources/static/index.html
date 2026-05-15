@@ -6,12 +6,12 @@
     <title>MovieSphere</title>
 
     <link rel="icon" href="data:,">
-    <link rel="stylesheet" href="css/base.css?v=20260512-1">
-    <link rel="stylesheet" href="css/layout.css?v=20260512-1">
-    <link rel="stylesheet" href="css/pages.css?v=20260512-1">
-    <link rel="stylesheet" href="css/components.css?v=20260512-1">
-    <link rel="stylesheet" href="css/dashboard.css?v=20260512-1">
-    <link rel="stylesheet" href="css/responsive.css?v=20260512-1">
+    <link rel="stylesheet" href="css/base.css?v=20260515-1">
+    <link rel="stylesheet" href="css/layout.css?v=20260515-1">
+    <link rel="stylesheet" href="css/pages.css?v=20260515-1">
+    <link rel="stylesheet" href="css/components.css?v=20260515-1">
+    <link rel="stylesheet" href="css/dashboard.css?v=20260515-1">
+    <link rel="stylesheet" href="css/responsive.css?v=20260515-1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 </head>
 
@@ -26,7 +26,7 @@
         <nav class="sidebar-nav">
             <div class="nav-section-title">General</div>
 
-            <div class="nav-item active" data-page="dashboard" onclick="navigate('dashboard')">
+            <div class="nav-item active" data-page="dashboard" data-admin-only="true" onclick="navigate('dashboard')">
                 <i class="ti ti-layout-dashboard"></i>
                 <span>Dashboard</span>
             </div>
@@ -58,19 +58,19 @@
                 <span>Recomandări</span>
             </div>
 
-            <div class="nav-item" data-page="clienti" onclick="navigate('clienti')">
+            <div class="nav-item" data-page="clienti" data-admin-only="true" onclick="navigate('clienti')">
                 <i class="ti ti-users"></i>
                 <span>Clienți</span>
             </div>
 
-            <div class="nav-section-title">Analiză</div>
+            <div class="nav-section-title" data-admin-only="true">Analiză</div>
 
-            <div class="nav-item" data-page="statistici" onclick="navigate('statistici')">
+            <div class="nav-item" data-page="statistici" data-admin-only="true" onclick="navigate('statistici')">
                 <i class="ti ti-chart-bar"></i>
                 <span>Statistici</span>
             </div>
 
-            <div class="nav-item" data-page="predictii" onclick="navigate('predictii')">
+            <div class="nav-item" data-page="predictii" data-admin-only="true" onclick="navigate('predictii')">
                 <i class="ti ti-chart-line"></i>
                 <span>Predicții</span>
             </div>
@@ -137,23 +137,23 @@
 
 <div id="toast-container"></div>
 
-<script src="js/core/state.js?v=20260512-1"></script>
-<script src="js/core/utils.js?v=20260512-1"></script>
-<script src="js/api/api.js?v=20260512-1"></script>
-<script src="js/components/modal.js?v=20260512-1"></script>
-<script src="js/router.js?v=20260512-1"></script>
-<script src="js/auth.js?v=20260512-1"></script>
-<script src="js/components/forms.js?v=20260512-1"></script>
-<script src="js/modules/dashboard.js?v=20260512-1"></script>
-<script src="js/modules/filme.js?v=20260512-1"></script>
-<script src="js/modules/actori.js?v=20260512-1"></script>
-<script src="js/modules/clienti.js?v=20260512-1"></script>
-<script src="js/modules/statistici.js?v=20260512-1"></script>
-<script src="js/modules/recomandari.js?v=20260512-1"></script>
-<script src="js/modules/predictii.js?v=20260512-1"></script>
-<script src="js/modules/profil.js?v=20260512-1"></script>
-<script src="js/modules/top.js?v=20260512-1"></script>
-<script src="js/router-page.js?v=20260512-1"></script>
-<script src="js/app.js?v=20260512-1"></script>
+<script src="js/core/state.js?v=20260515-1"></script>
+<script src="js/core/utils.js?v=20260515-1"></script>
+<script src="js/api/api.js?v=20260515-1"></script>
+<script src="js/components/modal.js?v=20260515-1"></script>
+<script src="js/router.js?v=20260515-1"></script>
+<script src="js/auth.js?v=20260515-1"></script>
+<script src="js/components/forms.js?v=20260515-1"></script>
+<script src="js/modules/dashboard.js?v=20260515-1"></script>
+<script src="js/modules/filme.js?v=20260515-1"></script>
+<script src="js/modules/actori.js?v=20260515-1"></script>
+<script src="js/modules/clienti.js?v=20260515-1"></script>
+<script src="js/modules/statistici.js?v=20260515-1"></script>
+<script src="js/modules/recomandari.js?v=20260515-1"></script>
+<script src="js/modules/predictii.js?v=20260515-1"></script>
+<script src="js/modules/profil.js?v=20260515-1"></script>
+<script src="js/modules/top.js?v=20260515-1"></script>
+<script src="js/router-page.js?v=20260515-1"></script>
+<script src="js/app.js?v=20260515-1"></script>
 </body>
 </html>

@@ -173,6 +173,15 @@ VALUES ('Ionescu', 'Andrei', 'andrei.ionescu@email.com', '$2a$12$9O42eKcu1aC3Cfc
        ('Cretu', 'Carmen', 'carmen.cretu@email.com', '$2a$12$9O42eKcu1aC3CfcIN4lnkeJs30C22LPLsuZ.ySJJDRN4LxSFAosS6',
         '0740000000', 'Alexandria');
 
+INSERT INTO clienti(nume, prenume, email, parola_hash, telefon, oras, rol)
+VALUES ('Stefan', 'Nicholas', 'nicholasstefan654@gmail.com',
+        '$2a$12$dIUJxfy2Pnrmmz5kkgkKVeJsOmF1Ea8DyLvzaZET0WVVva2ZHb1vK',
+        '0741111111', 'Bucuresti', 'ADMIN')
+ON CONFLICT (email) DO UPDATE SET
+    parola_hash = EXCLUDED.parola_hash,
+    rol = 'ADMIN',
+    activ = TRUE;
+
 
 INSERT INTO vizualizari(id_client, id_film, id_versiune, data_vizualizare, finalizata, vot)
 VALUES

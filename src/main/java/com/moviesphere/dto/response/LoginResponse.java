@@ -9,4 +9,5 @@ public class LoginResponse {
     private String prenume;
     private String email;
     private String oras;
+    private String rol;
 }

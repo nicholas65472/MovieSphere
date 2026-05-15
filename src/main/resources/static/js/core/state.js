@@ -6,6 +6,20 @@ const state = {
   cache: {},
 };
 
+const ADMIN_ONLY_PAGES = new Set(['dashboard', 'clienti', 'statistici', 'predictii']);
+
+function isAdmin() {
+  return String(state.user?.rol || '').toUpperCase() === 'ADMIN';
+}
+
+function defaultPageForUser() {
+  return isAdmin() ? 'dashboard' : 'filme';
+}
+
+function canAccessPage(page) {
+  return !ADMIN_ONLY_PAGES.has(page) || isAdmin();
+}
+
 function loadState() {
   const saved = sessionStorage.getItem('ms_user');
 

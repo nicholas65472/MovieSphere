@@ -9,13 +9,17 @@ function updateUserUI() {
   if (state.user) {
     const fullName = `${state.user.prenume || ''} ${state.user.nume || ''}`.trim() || 'Client';
     nameEl.textContent = fullName;
-    emailEl.textContent = state.user.email || '';
+    emailEl.textContent = isAdmin()
+      ? `${state.user.email || ''} · ADMIN`
+      : state.user.email || '';
     avatarEl.textContent = initials(fullName);
   } else {
     nameEl.textContent = 'Vizitator';
     emailEl.textContent = 'Click pentru login';
     avatarEl.textContent = '?';
   }
+
+  applyRoleNavigation();
 }
 
 function handleUserClick() {
@@ -30,7 +34,7 @@ function logout() {
   saveUser(null);
   updateUserUI();
   showToast('Ai ieșit din cont.', 'success');
-  navigate('dashboard');
+  navigate(defaultPageForUser());
 }
 
 /* ── AUTH ── */
@@ -53,7 +57,7 @@ async function handleLoginSubmit(event) {
     closeModal('modal-login');
 
     showToast('Autentificare reușită.', 'success');
-    navigate('dashboard');
+    navigate(defaultPageForUser());
   } catch (error) {
     showToast(error.message, 'error');
   }

@@ -32,7 +32,7 @@ public class ClientRepository {
 
     public LoginResponse autentificareParola(String email, String parolaRaw,
                                              PasswordEncoder passwordEncoder) {
-        String sql = "SELECT id, nume, prenume, email, oras, parola_hash, activ FROM clienti WHERE email = ?";
+        String sql = "SELECT id, nume, prenume, email, oras, rol, parola_hash, activ FROM clienti WHERE email = ?";
         try {
             List<Map<String, Object>> rezultat = jdbc.queryForList(sql, email);
 
@@ -60,6 +60,7 @@ public class ClientRepository {
             response.setPrenume((String) client.get("prenume"));
             response.setEmail((String) client.get("email"));
             response.setOras((String) client.get("oras"));
+            response.setRol((String) client.get("rol"));
             return response;
 
         } catch (DataAccessException ex) {
@@ -144,7 +145,7 @@ public class ClientRepository {
     }
 
     public List<Map<String, Object>> totiClientii() {
-        String sql = "SELECT id, nume, prenume, email, telefon, oras, data_inregistrare, activ FROM clienti " +
+        String sql = "SELECT id, nume, prenume, email, telefon, oras, rol, data_inregistrare, activ FROM clienti " +
                 "ORDER BY data_inregistrare DESC";
         return jdbc.queryForList(sql);
     }

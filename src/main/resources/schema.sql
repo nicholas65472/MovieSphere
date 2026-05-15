@@ -79,6 +79,7 @@ Create Table clienti (
     oras VARCHAR(100),
     data_nasterii DATE,
     data_inregistrare TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    rol VARCHAR(20) NOT NULL DEFAULT 'CLIENT' CHECK (rol IN ('ADMIN', 'CLIENT')),
     activ BOOLEAN DEFAULT TRUE
 );
 

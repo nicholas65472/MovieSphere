@@ -1,5 +1,13 @@
 /* ── NAVIGATION ── */
 function navigate(page, params = {}) {
+  if (!canAccessPage(page)) {
+    if (state.user) {
+      showToast('Pagina este disponibila doar pentru administratori.', 'error');
+    }
+    page = defaultPageForUser();
+    params = {};
+  }
+
   state.currentPage = page;
   state.currentParams = params;
 
@@ -28,6 +36,18 @@ function navigate(page, params = {}) {
   }
 
   toggleSidebar(false);
+}
+
+function applyRoleNavigation() {
+  const admin = isAdmin();
+
+  qsa('[data-admin-only="true"]').forEach(item => {
+    item.style.display = admin ? '' : 'none';
+  });
+
+  if (!canAccessPage(state.currentPage)) {
+    navigate(defaultPageForUser());
+  }
 }
 
 function updateTopbarTitle(page) {

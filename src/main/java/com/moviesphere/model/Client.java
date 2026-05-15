@@ -17,5 +17,6 @@ public class Client {
     private String oras;
     private LocalDate dataNasterii;
     private LocalDateTime dataInregistrare;
+    private String rol;
     private Boolean activ;
 }

@@ -174,7 +174,7 @@ VALUES ('Ionescu', 'Andrei', 'andrei.ionescu@email.com', '$2a$12$9O42eKcu1aC3Cfc
         '0740000000', 'Alexandria');
 
 INSERT INTO clienti(nume, prenume, email, parola_hash, telefon, oras, rol)
-VALUES ('Stefan', 'Nicholas', 'nicholasstefan654@gmail.com',
+VALUES ('Stefan', 'Nicholas', 'nicholas.stefan@email.com',
         '$2a$12$dIUJxfy2Pnrmmz5kkgkKVeJsOmF1Ea8DyLvzaZET0WVVva2ZHb1vK',
         '0741111111', 'Bucuresti', 'ADMIN')
 ON CONFLICT (email) DO UPDATE SET

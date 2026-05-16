@@ -1,4 +1,3 @@
-/* ── DOM HELPERS ── */
 function el(id) {
   return document.getElementById(id);
 }
@@ -11,7 +10,6 @@ function qsa(selector, context = document) {
   return Array.from(context.querySelectorAll(selector));
 }
 
-/* ── FORMAT HELPERS ── */
 function escHtml(value) {
   return String(value ?? '')
     .replace(/&/g, '&amp;')
@@ -80,7 +78,6 @@ function compactNumber(value) {
   }).format(number);
 }
 
-/* ── UI HELPERS ── */
 function loading(message = '') {
   return `
     <div class="loading-block">

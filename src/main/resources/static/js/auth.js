@@ -1,4 +1,3 @@
-/* ── USER UI ── */
 function updateUserUI() {
   const nameEl = el('sidebar-user-name');
   const emailEl = el('sidebar-user-email');
@@ -37,7 +36,6 @@ function logout() {
   navigate(defaultPageForUser());
 }
 
-/* ── AUTH ── */
 async function handleLoginSubmit(event) {
   event.preventDefault();
 

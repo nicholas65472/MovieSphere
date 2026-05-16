@@ -335,5 +335,3 @@ async function dezactiveazaClient(id, name) {
     showToast(error.message, 'error');
   }
 }
-
-/* ── STATISTICI ── */

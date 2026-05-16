@@ -1,4 +1,3 @@
-/* ── NAVIGATION ── */
 function navigate(page, params = {}) {
   if (!canAccessPage(page)) {
     if (state.user) {
@@ -74,7 +73,6 @@ function handleGlobalSearch(event) {
   navigate('filme', { q: query });
 }
 
-/* ── SIDEBAR ── */
 function toggleSidebar(open) {
   const sidebar = el('sidebar');
   const overlay = el('sidebar-overlay');

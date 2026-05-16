@@ -1,4 +1,3 @@
-/* ── STATE ── */
 const state = {
   user: null,
   currentPage: 'dashboard',

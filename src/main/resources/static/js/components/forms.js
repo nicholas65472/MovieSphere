@@ -1,4 +1,3 @@
-/* ── FORMS ── */
 function buildRatingPicker(containerId, onSelect) {
   const container = el(containerId);
   if (!container) return () => 0;
@@ -36,7 +35,6 @@ function buildRatingPicker(containerId, onSelect) {
   return () => selected;
 }
 
-/* ── VIZUALIZARI ── */
 function getFilmId(film) {
   return film.id || film.idFilm || film.id_film;
 }
@@ -192,7 +190,6 @@ async function handleVizualizareSubmit(event) {
   }
 }
 
-/* ── COMENTARII ── */
 async function loadComentariuOptions() {
   const container = el('comentariu-optiuni');
   if (!container) return;

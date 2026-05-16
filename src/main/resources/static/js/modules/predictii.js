@@ -129,5 +129,3 @@ function seasonColor(season) {
     Toamna: '#ff6b35',
   }[season] || 'var(--accent)';
 }
-
-/* ── PROFIL ── */

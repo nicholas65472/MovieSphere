@@ -232,5 +232,3 @@ function renderProfilIstoric(istoric) {
     </table>
   `;
 }
-
-/* ── TOP FILME ── */

@@ -136,5 +136,3 @@ async function loadTop() {
     `;
   }
 }
-
-/* ── RENDER PAGE ROUTER ── */

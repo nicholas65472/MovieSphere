@@ -347,5 +347,3 @@ function renderFilmComentarii(comentarii) {
     `;
   }).join('');
 }
-
-/* ── ACTORI ── */

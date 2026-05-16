@@ -300,5 +300,3 @@ async function loadAudit() {
     `;
   }
 }
-
-/* ── RECOMANDARI ── */

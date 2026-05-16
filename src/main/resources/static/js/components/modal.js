@@ -1,4 +1,3 @@
-/* ── MODALS ── */
 function openModal(id) {
   const modal = el(id);
   if (!modal) return;
@@ -19,7 +18,6 @@ function closeModal(id) {
   }
 }
 
-/* ── TABS ── */
 function initTabs(container) {
   if (!container) return;
 

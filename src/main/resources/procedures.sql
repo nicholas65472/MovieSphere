@@ -590,8 +590,7 @@ RETURNS TABLE (
 DECLARE
 v_luni_sezon INTEGER[];
 BEGIN
-    v_luni_sezon
-:= CASE p_sezon
+    v_luni_sezon := CASE p_sezon
         WHEN 'Iarna' THEN ARRAY[12, 1, 2]
         WHEN 'Primavara' THEN ARRAY[3, 4, 5]
         WHEN 'Vara' THEN ARRAY[6, 7, 8]
